@@ -2,24 +2,15 @@ import pandas as pd
 import streamlit as st
 
 @st.cache_data
-def load_data(file_path):
-    """
-    Load dataset and perform basic cleaning.
-    """
-    df = pd.read_csv(file_path)
+def load_data(file):
 
-    # Remove duplicates
-    df = df.drop_duplicates()
+    try:
+        df = pd.read_csv(file)
 
-    # Fill missing values
-    df = df.fillna(0)
+        df.drop_duplicates(inplace=True)
 
-    return df
+        return df
 
-
-def get_numeric_columns(df):
-    return df.select_dtypes(include=['int64', 'float64']).columns.tolist()
-
-
-def get_categorical_columns(df):
-    return df.select_dtypes(include=['object']).columns.tolist()
+    except Exception as e:
+        st.error(f"Error Loading Dataset: {e}")
+        return pd.DataFrame()

@@ -1,0 +1,18 @@
+from PIL import Image, ImageDraw, ImageFont
+
+# Create image
+img = Image.new("RGB", (500, 200), color=(25, 25, 40))
+
+draw = ImageDraw.Draw(img)
+
+# Add text
+draw.text(
+    (80, 70),
+    "🤖 AI Dashboard",
+    fill=(255, 255, 255)
+)
+
+# Save logo
+img.save("logo.png")
+
+print("Logo created successfully!")

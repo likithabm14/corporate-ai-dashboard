@@ -1,73 +1,45 @@
 def generate_insights(df):
 
-    insights = {}
+    insights = []
 
-    # Top Industry
-    top_industry = (
-        df.groupby("industry")
-        ["ai_adoption_level"]
-        .mean()
-        .idxmax()
-    )
-
-    insights["Top Industry"] = top_industry
-
-    # Top Country
     top_country = (
-        df.groupby("country")
-        ["revenue_impact"]
-        .sum()
+        df.groupby("country")["ai_adoption_level"]
+        .mean()
         .idxmax()
     )
 
-    insights["Top Country"] = top_country
-
-    # Highest Revenue Impact
-    revenue = (
-        df["revenue_impact"]
-        .sum()
-    )
-
-    insights["Total Revenue Impact"] = round(revenue, 2)
-
-    # Total Investment
-    investment = (
-        df["ai_investment_usd"]
-        .sum()
-    )
-
-    insights["Total AI Investment"] = round(investment, 2)
-
-    # Average Adoption
-    adoption = (
-        df["ai_adoption_level"]
+    top_industry = (
+        df.groupby("industry")["ai_adoption_level"]
         .mean()
+        .idxmax()
     )
 
-    insights["Average AI Adoption"] = round(adoption, 2)
+    avg_gain = (
+        df["productivity_gain"].mean() * 100
+    )
+
+    total_investment = (
+        df["ai_investment_usd"].sum()/1e9
+    )
+
+    insights.append(
+        f"Top AI adoption country: {top_country}"
+    )
+
+    insights.append(
+        f"Leading industry: {top_industry}"
+    )
+
+    insights.append(
+        f"Average productivity gain is {avg_gain:.2f}%"
+    )
+
+    insights.append(
+        f"Total AI investment exceeds ${total_investment:.2f} Billion"
+    )
+
+    insights.append(
+        "Organizations with higher AI maturity show stronger revenue growth."
+    )
 
     return insights
-
-
-def recommendation_engine(df):
-
-    recommendations = []
-
-    avg_adoption = df["ai_adoption_level"].mean()
-
-    if avg_adoption < 50:
-        recommendations.append(
-            "Increase AI implementation across departments."
-        )
-
-    if df["revenue_impact"].mean() > 0:
-        recommendations.append(
-            "AI investments are producing positive revenue impact."
-        )
-
-    if df["ai_investment_usd"].mean() > 100000:
-        recommendations.append(
-            "High AI investment trend observed."
-        )
-
-    return recommendations
